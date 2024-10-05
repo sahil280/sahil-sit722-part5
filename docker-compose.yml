@@ -1,1 +1,34 @@
 # Your Solution
+
+# Docker compose file for building docker images and running locally
+
+version: '3.8'
+
+services:
+  book_catalog:
+    build:
+     context: ./book_catalog
+     dockerfile: Dockerfile
+    image: book_catalog
+    ports:
+      - "8001:80"
+    environment:
+      - DATABASE_URL=postgresql://sit722_9_2d_w11m_user:9LqFoGMyQrLCNfJX6jA6p68jk8QknpVc@dpg-crulpvggph6c73akt3h0-a.oregon-postgres.render.com/sit722_9_2d_w11m
+    networks:
+      - app-networks
+
+  inventory_management:
+    build:
+     context: ./inventory_management
+     dockerfile: Dockerfile
+    image: inventory_management
+    ports:
+      - "8002:80"
+    environment:
+     - DATABASE_URL=postgresql://sit722_9_2d_w11m_user:9LqFoGMyQrLCNfJX6jA6p68jk8QknpVc@dpg-crulpvggph6c73akt3h0-a.oregon-postgres.render.com/sit722_9_2d_w11m
+    networks:
+      - app-networks
+
+networks:
+  app-networks:
+    driver: bridge

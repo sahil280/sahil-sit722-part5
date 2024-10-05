@@ -1,0 +1,39 @@
+# Kubernetes deployment file to deploy inventory_management microservices to aks
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-management-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-management
+  template:
+    metadata:
+      labels:
+        app: inventory-management
+    spec:
+      containers:
+      - name: inventory-management
+        image: week9task2.azurecr.io/inventory_management:$VERSION
+        ports:
+        - containerPort: 80
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://sit722_9_2d_w11m_user:9LqFoGMyQrLCNfJX6jA6p68jk8QknpVc@dpg-crulpvggph6c73akt3h0-a.oregon-postgres.render.com/sit722_9_2d_w11m"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-management-service
+spec:
+  selector:
+    app: inventory-management
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
